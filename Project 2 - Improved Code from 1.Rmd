@@ -30,7 +30,7 @@ data <- read.spss("PPD full.sav")
 
 This graph shows how age impacts having postnatal or postpartum depression. The study used the Edinburgh Postnatal Depression Scale (EPDS), in which anything less than 13 indicates no depression whereas anything above or equal to 13 indicates depression. This graph shows that mothers on the younger end are more likely to get postpartum depression. Mothers around 30 are less likely to get depression, however, this could be that large amounts of the data lie in this region causing for both not having depression and having depression to have large margins.
 
-To update this plot, I used a function to create a graph based on 4 different age ranges and then used a loop to graph each of these age groups. The function is called 4 different times within the loop.
+To update this plot, I used a function to create a graph based on 4 different age ranges and then used a loop to graph each of these age groups. The function is called 4 different times within the loop in order to reduce redundancy and to make the code look cleaner.
 
 ```{r, include=TRUE}
 age <- data$age
