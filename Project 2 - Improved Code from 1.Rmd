@@ -1,0 +1,119 @@
+---
+title: "Project 2 - Improved Code from 1"
+author: "Emma Dudley"
+date: "2024-11-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project 2 - Factors Impacting Postnatal Depression
+
+Source I got my data from: 
+https://figshare.com/articles/dataset/Risk_Factors_Of_Postpartum_Depression_A_Study_At_4-Weeks_Postnatal/14705967?file=28241874
+
+Here are the needed packages to help with the visualization:
+```{r, include=TRUE}
+library(foreign)
+library(ggplot2)
+library(janitor)
+library(tidyverse)
+```
+
+```{r, include=TRUE}
+data <- read.spss("PPD full.sav")
+```
+
+## Plot 1: Age vs. Postpartum Depression
+
+This graph shows how age impacts having postnatal or postpartum depression. The study used the Edinburgh Postnatal Depression Scale (EPDS), in which anything less than 13 indicates no depression whereas anything above or equal to 13 indicates depression. This graph shows that mothers on the younger end are more likely to get postpartum depression. Mothers around 30 are less likely to get depression, however, this could be that large amounts of the data lie in this region causing for both not having depression and having depression to have large margins.
+
+To update this plot, I used a function to create a graph based on 4 different age ranges and then used a loop to graph each of these age groups. The function is called 4 different times within the loop.
+
+Cite, facetwrap
+
+```{r, include=TRUE}
+age <- data$age
+edps <- data$EPPDscale
+levels(edps) <- c("Less than 13", "More or Equal to 13")
+age_groups <- cut(age, breaks = c(20, 25, 30, 35, 40), labels = c("20 to 25", "25 to 30", "30 to 35", "35 to 40"))
+
+p1 <- data.frame(age, edps, age_groups)
+clean_p1 <- na.omit(p1)
+```
+
+```{r, include=TRUE}
+plot_edps_vs_age <- function(clean_p1) {
+  
+  ggplot(clean_p1, aes(x = edps, y = age, fill = edps)) +
+    geom_violin() +
+    labs(
+      x = "Edinburgh Postnatal Depression Scale (EPDS)",
+      y = "Age of Mother",
+      title = paste("Impact of Age of Mother on Postnatal Depression based on Age Group")
+    ) +
+    theme_minimal() +
+    labs(fill = "EDPS Meaning") +
+    scale_fill_manual(
+      name = "EDPS Meaning", 
+      values = c("#FFDBBB", "#0067cd"), 
+      labels = c("No Depression", "Depression")
+    ) +
+    facet_wrap(~ age_groups)
+}
+```
+
+```{r, include=TRUE}
+for(age_group in unique(clean_p1$age_groups)){
+  plot_1 <- plot_edps_vs_age(clean_p1[clean_p1$age_groups == age_group, ])
+  print(plot_1)
+}
+```
+
+## Plot 2: How losing children impacts Postpartum Depression
+
+This graph shows how women who have lost children may be related to depression. The x axis is the edps score while the y is number of births. The legend shows the number of living children. Any of the number of births that don't match up with the living children shows that a mother has lost a child. I would think that those who have lost children may have depression, however, this is not the entirely the case. Postpartum depression can happen to anyone despite having lost a child. This data set does not include depression as a whole so they may have that but not postpartum depression.
+
+In this, I added a loop to make different graphs based on how many living children the mother currently has. This allows the data to be more specific and subset.
+
+```{r, include=TRUE}
+birth <- data$numberofbirths
+livingchildren <- data$livingchildren
+edps.2 <- data$EPPDscale
+levels(edps.2) <- c("Less than 13 = No Depression", "More or Equal to 13 = Depression")
+
+p2 <- data.frame(birth, livingchildren, edps.2)
+
+for (child_count in unique(p2$livingchildren)) {
+  subset_data <- p2[p2$livingchildren == child_count, ]
+  p <- ggplot(subset_data, aes(x = edps.2, y = birth, fill = edps.2)) +
+    geom_tile() +
+    labs(
+      x = "EDPS Score",
+      y = "Number of Births",
+      title = paste("Living Children:", child_count, "- Impact on Postpartum Depression"),
+      fill = "EDPS Score Meaning"
+    ) +
+    theme_classic() +
+    scale_fill_manual(
+      name = "EDPS Meaning", 
+      values = c("#FFDBBB", "#0067cd"), 
+      labels = c("No Depression", "Depression"))
+  print(p)
+}
+```
+
+Sources:
+https://help.displayr.com/hc/en-us/articles/360003582155-How-to-Import-SPSS-Data-Sets-Using-R
+https://stackoverflow.com/questions/7706876/remove-na-values-from-a-vector
+http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+https://idc9.github.io/stor390/notes/custom_viz/custom_viz.html
+https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+https://www.geeksforgeeks.org/create-heatmap-in-r-using-ggplot2/
+https://ggplot2.tidyverse.org/reference/ggtheme.html
+https://stackoverflow.com/questions/55528008/how-to-rename-a-legend-item-in-ggplot 
+https://www.statology.org/cut-function-in-r/
+https://www.zevross.com/blog/2019/04/02/easy-multi-panel-plots-in-r-using-facet_wrap-and-facet_grid-from-ggplot2/
+
