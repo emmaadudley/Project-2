@@ -1,7 +1,7 @@
 ---
 title: "Project 2 - Improved Code from 1"
 author: "Emma Dudley"
-date: "2024-11-11"
+date: "2024-11-15"
 output: html_document
 ---
 
@@ -31,8 +31,6 @@ data <- read.spss("PPD full.sav")
 This graph shows how age impacts having postnatal or postpartum depression. The study used the Edinburgh Postnatal Depression Scale (EPDS), in which anything less than 13 indicates no depression whereas anything above or equal to 13 indicates depression. This graph shows that mothers on the younger end are more likely to get postpartum depression. Mothers around 30 are less likely to get depression, however, this could be that large amounts of the data lie in this region causing for both not having depression and having depression to have large margins.
 
 To update this plot, I used a function to create a graph based on 4 different age ranges and then used a loop to graph each of these age groups. The function is called 4 different times within the loop.
-
-Cite, facetwrap
 
 ```{r, include=TRUE}
 age <- data$age
@@ -76,7 +74,7 @@ for(age_group in unique(clean_p1$age_groups)){
 
 This graph shows how women who have lost children may be related to depression. The x axis is the edps score while the y is number of births. The legend shows the number of living children. Any of the number of births that don't match up with the living children shows that a mother has lost a child. I would think that those who have lost children may have depression, however, this is not the entirely the case. Postpartum depression can happen to anyone despite having lost a child. This data set does not include depression as a whole so they may have that but not postpartum depression.
 
-In this, I added a loop to make different graphs based on how many living children the mother currently has. This allows the data to be more specific and subset.
+In this, I added a loop to make different graphs based on how many living children the mother currently has. This allows the data to be more specific and subset. The specific graphs are based on how many living children there, with the x axis showing if their edps score added up to 13 and the y axis being based on how births they've had.
 
 ```{r, include=TRUE}
 birth <- data$numberofbirths
